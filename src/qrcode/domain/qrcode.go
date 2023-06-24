@@ -6,7 +6,6 @@ type (
 		ErrorRecovery  int
 		Width          int
 		TargetFilename string
-		Border         bool
 		CenterImage    string
 	}
 

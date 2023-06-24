@@ -2,6 +2,7 @@ package qrcode
 
 import (
 	"flamingo.me/dingo"
+
 	"github.com/spf13/cobra"
 
 	"qrcode_gen/src/qrcode/application"
