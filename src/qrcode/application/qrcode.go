@@ -36,19 +36,23 @@ func (s *QrCodeServiceImpl) Generate(args domain.CommandArguments) error {
 
 	newQRCode.DisableBorder = true
 
-	png, err := newQRCode.PNG(args.Width)
+	qrCodePNG, err := newQRCode.PNG(args.Width)
 	if err != nil {
 		return err
 	}
 
 	if args.CenterImage != "" {
-		png, err = s.superImpose(png, args.Width, args.CenterImage)
+		_, err := os.Stat(args.CenterImage)
+		if err != nil {
+			return err
+		}
+		qrCodePNG, err = s.superImpose(qrCodePNG, args.CenterImage)
 		if err != nil {
 			return err
 		}
 	}
 
-	err = s.saveFile(png, args.TargetFilename)
+	err = s.saveFile(qrCodePNG, args.TargetFilename)
 	if err != nil {
 		return err
 	}
@@ -83,7 +87,7 @@ func (s *QrCodeServiceImpl) saveFile(imgByte []byte, targetFileName string) erro
 	return nil
 }
 
-func (s *QrCodeServiceImpl) superImpose(imgByte []byte, width int, centerImage string) ([]byte, error) {
+func (s *QrCodeServiceImpl) superImpose(imgByte []byte, centerImage string) ([]byte, error) {
 	imposeFile, err := os.Open(centerImage)
 	if err != nil {
 		return nil, err
